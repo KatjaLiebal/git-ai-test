@@ -17,31 +17,24 @@ df_2018['Year'] = 2018
 df_2019['Year'] = 2019
 
 # Rename columns to be consistent
-rename_dict_2015 = {'Country': 'Country'}
-rename_dict_2016 = {'Country': 'Country'}
-rename_dict_2017 = {'Country': 'Country'}
-rename_dict_2018 = {'Country or region': 'Country'}
-rename_dict_2019 = {'Country or region': 'Country'}
-
-# Apply renames
-df_2015.rename(columns=rename_dict_2015, inplace=True)
-df_2016.rename(columns=rename_dict_2016, inplace=True)
-df_2017.rename(columns={'\"Country\"': 'Country'}, inplace=True)
-df_2018.rename(columns=rename_dict_2018, inplace=True)
-df_2019.rename(columns=rename_dict_2019, inplace=True)
+df_2015.rename(columns={'Happiness Rank': 'Happiness Rank', 'Country': 'Country'}, inplace=True)
+df_2016.rename(columns={'Happiness Rank': 'Happiness Rank', 'Country': 'Country'}, inplace=True)
+df_2017.rename(columns={'Happiness.Rank': 'Happiness Rank', 'Country': 'Country'}, inplace=True)
+df_2018.rename(columns={'Overall rank': 'Happiness Rank', 'Country or region': 'Country'}, inplace=True)
+df_2019.rename(columns={'Overall rank': 'Happiness Rank', 'Country or region': 'Country'}, inplace=True)
 
 # Combine all data
 df_2017['Country'] = df_2017['Country'].str.strip('"')
 all_data = pd.concat([df_2015[['Country', 'Happiness Rank', 'Year']], 
                        df_2016[['Country', 'Happiness Rank', 'Year']],
                        df_2017[['Country', 'Happiness Rank', 'Year']],
-                       df_2018[['Overall rank', 'Country', 'Year']].rename(columns={'Overall rank': 'Happiness Rank'}),
-                       df_2019[['Overall rank', 'Country', 'Year']].rename(columns={'Overall rank': 'Happiness Rank'})],
+                       df_2018[['Country', 'Happiness Rank', 'Year']],
+                       df_2019[['Country', 'Happiness Rank', 'Year']]],
                       ignore_index=True)
 
 # Select top 10 and bottom 10 countries to track
-top_countries = df_2019.nsmallest(10, 'Overall rank')['Country or region'].tolist()
-bottom_countries = df_2019.nlargest(10, 'Overall rank')['Country or region'].tolist()
+top_countries = df_2019.nsmallest(10, 'Happiness Rank')['Country'].tolist()
+bottom_countries = df_2019.nlargest(10, 'Happiness Rank')['Country'].tolist()
 
 # Create figure with two subplots
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 12))
